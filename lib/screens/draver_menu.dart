@@ -1,7 +1,7 @@
+import 'package:dte_app/route/route_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:dte_app/providers/route_provider.dart';
+
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key}) : super(key: key);
@@ -31,18 +31,7 @@ class DrawerMenu extends StatelessWidget {
             final subRoutes = item['subRoutes'] ?? [];
             if (subRoutes.isNotEmpty) {
               return ExpansionTile(
-                title: GestureDetector(
-                  onTap: () {
-                    context.go(item['path']);
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(item['pageName'] ?? 'No Name'),
-                    ],
-                  ),
-                ),
+                title: Text(item['pageName'] ?? 'No Name'),
                 children: subRoutes.map<Widget>((subItem) {
                   return Container(
                     padding: const EdgeInsetsDirectional.only(start: 10),
@@ -53,8 +42,8 @@ class DrawerMenu extends StatelessWidget {
                             fontSize: 14,
                           )),
                       onTap: () {
-                        context.go('${item['path']}/${subItem['path']}');
                         Navigator.pop(context);
+                        Navigator.pushNamed(context, subItem['path']);
                       },
                     ),
                   );
@@ -64,8 +53,8 @@ class DrawerMenu extends StatelessWidget {
               return ListTile(
                 title: Text(item['pageName'] ?? 'No Name'),
                 onTap: () {
-                  context.go(item['path']);
                   Navigator.pop(context);
+                  Navigator.pushNamed(context, item['path']);
                 },
               );
             }
