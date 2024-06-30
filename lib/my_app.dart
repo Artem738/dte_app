@@ -8,8 +8,6 @@ import 'package:dte_app/routes/independent_routes.dart';
 import 'package:dte_app/screens/tech_screens/error_screen.dart';
 import 'package:dte_app/screens/tech_screens/loading_screen.dart';
 
-
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -28,7 +26,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: context.read<MenuProvider>().fetchMenu(),
       builder: (context, snapshot) {
@@ -36,28 +33,28 @@ class _MyAppState extends State<MyApp> {
 
         if (snapshot.connectionState != ConnectionState.done) {
           return const MaterialApp(
-            home: LoadingScreen(),
             debugShowCheckedModeBanner: showDebugBanner,
+            home: LoadingScreen(),
           );
         }
 
         if (snapshot.hasError) {
           return MaterialApp(
-            home: ErrorScreen(errorMessage: snapshot.error.toString()),
             debugShowCheckedModeBanner: showDebugBanner,
+            home: ErrorScreen(errorMessage: snapshot.error.toString()),
           );
         }
 
         if (errorMessage != null) {
           return MaterialApp(
-            home: ErrorScreen(errorMessage: errorMessage),
             debugShowCheckedModeBanner: showDebugBanner,
+            home: ErrorScreen(errorMessage: errorMessage),
           );
         }
 
         return MaterialApp.router(
-          routerConfig: AppRoutes.createRouter(context.read<RouteProvider>()),
           debugShowCheckedModeBanner: showDebugBanner,
+          routerConfig: AppRoutes.createRouter(context.read<RouteProvider>()),
         );
       },
     );

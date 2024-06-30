@@ -8,6 +8,8 @@ import 'package:dte_app/providers/route_provider.dart';
 
 
 void main() {
+  // Устанавливаем debugShowCheckedModeBanner в false до запуска приложения
+  //WidgetsFlutterBinding.ensureInitialized();
   runApp(AppStateManager(
     child: MultiProvider(
       providers: [
