@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: EnvConfig.showDebugUpRightBanner,
         title: 'Dynamic Routes App',
         initialRoute: '/',
         onGenerateRoute: (settings) {
