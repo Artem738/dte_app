@@ -11,6 +11,20 @@ class RouteProvider with ChangeNotifier {
 
   List<RouteModel> get routes => _routes;
 
+
+  static Future<List<RouteModel>>  fetchRoutData() async {
+    String url = '${EnvConfig.mainApiUrl}api/menu/ru';
+    final response = await http.get(Uri.parse(url));
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((json) => RouteModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   void setRoutes(List<RouteModel> routes) {
     _routes = routes;
     notifyListeners();
@@ -36,27 +50,18 @@ class RouteProvider with ChangeNotifier {
     return null;
   }
 
-  static Future<List<RouteModel>>  fetchData() async {
-    String url = '${EnvConfig.mainApiUrl}api/menu/ru';
-    final response = await http.get(Uri.parse(url));
-    print(response.body);
 
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      return data.map((json) => RouteModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
 
   List<Map<String, dynamic>> getMenuItems() {
     return _routes.map((route) {
       return {
         'path': route.path,
+        'pageType': route.pageType,
         'pageName': route.pageName,
         'subRoutes': route.subRoutes?.map((subRoute) {
           return {
             'path': '${route.path}/${subRoute.path}',
+            'pageType': route.pageType,
             'pageName': subRoute.pageName,
           };
         }).toList()

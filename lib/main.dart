@@ -1,56 +1,27 @@
+import 'package:dte_app/my_app.dart';
 import 'package:dte_app/route/route_model.dart';
 import 'package:dte_app/route/route_provider.dart';
-import 'package:dte_app/screens/dynamic_page.dart';
+import 'package:dte_app/screens/error_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'dart:convert';
-import 'env_config.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  List<RouteModel> routes = await RouteProvider.fetchData();
-  runApp(MyApp(routes: routes));
-}
 
+  try {
+    List<RouteModel> routes = await RouteProvider.fetchRoutData();
 
+    final routeProvider = RouteProvider();
+    routeProvider.setRoutes(routes);
 
-class MyApp extends StatelessWidget {
-  final List<RouteModel> routes;
-
-  MyApp({required this.routes});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+    runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => RouteProvider()..setRoutes(routes),
-        ),
+        ChangeNotifierProvider(create: (_) => routeProvider),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: EnvConfig.showDebugUpRightBanner,
-        title: 'Dynamic Routes App',
-        initialRoute: '/',
-        onGenerateRoute: (settings) {
-          return RouteProvider().generateRoute(settings, routes);
-        },
-        onUnknownRoute: (settings) {
-          return MaterialPageRoute(builder: (context) => UnknownPage());
-        },
-      ),
-    );
-  }
-
-
-}
-
-class UnknownPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Unknown Page')),
-      body: Center(child: Text('404 - Page Not Found')),
-    );
+      child: MyApp(routes: routes), // Передаем routes в MyApp
+    ));
+  } catch (error) {
+    runApp(ErrorApp(errorMessage: 'Ошибка загрузки данных. Пожалуйста, попробуйте снова.'));
   }
 }
+
