@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           title: 'Dynamic Routes App',
           initialRoute: '/',
           onGenerateRoute: (settings) {
-            // Используем существующий routeProvider и передаем маршруты
+
             return routeProvider.generateRoute(settings, routes);
           },
           onUnknownRoute: (settings) {
@@ -27,6 +27,26 @@ class MyApp extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class NewPage1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('New Page 1')),
+      body: Center(child: Text('This is New Page 1')),
+    );
+  }
+}
+
+class NewPage2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('New Page 2')),
+      body: Center(child: Text('This is New Page 2')),
     );
   }
 }

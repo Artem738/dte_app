@@ -13,7 +13,7 @@ class RouteProvider with ChangeNotifier {
 
 
   static Future<List<RouteModel>>  fetchRoutData() async {
-    String url = '${EnvConfig.mainApiUrl}api/menu/ru';
+    String url = '${EnvConfig.mainApiUrl}api/menu/en';
     final response = await http.get(Uri.parse(url));
     print(response.body);
 
@@ -33,22 +33,35 @@ class RouteProvider with ChangeNotifier {
   Route<dynamic>? generateRoute(RouteSettings settings, List<RouteModel> routes) {
     for (var route in routes) {
       if (settings.name == route.path) {
-        return MaterialPageRoute(
-          builder: (context) => DynamicPage(routeModel: route),
-        );
+        if (route.builder != null) {
+          return MaterialPageRoute(
+            builder: (context) => route.builder!(context, settings),
+          );
+        } else {
+          return MaterialPageRoute(
+            builder: (context) => DynamicPage(routeModel: route),
+          );
+        }
       }
       if (route.subRoutes != null) {
         for (var subRoute in route.subRoutes!) {
           if (settings.name == '${route.path}/${subRoute.path}') {
-            return MaterialPageRoute(
-              builder: (context) => DynamicPage(routeModel: subRoute),
-            );
+            if (subRoute.builder != null) {
+              return MaterialPageRoute(
+                builder: (context) => subRoute.builder!(context, settings),
+              );
+            } else {
+              return MaterialPageRoute(
+                builder: (context) => DynamicPage(routeModel: subRoute),
+              );
+            }
           }
         }
       }
     }
     return null;
   }
+
 
 
 
@@ -68,4 +81,20 @@ class RouteProvider with ChangeNotifier {
       };
     }).toList();
   }
+
+  void addIndependentRoutes(List<Map<String, dynamic>> independentRoutes) {
+    final newRoutes = independentRoutes.map((routeData) {
+      return RouteModel(
+        path: routeData['path'],
+        pageName: routeData['pageName'],
+        pageType: routeData['pageType'], // можно задать значение по умолчанию или взять из данных
+        pagePathName: routeData['pagePathName'],
+        builder: routeData['builder'],
+      );
+    }).toList();
+
+    _routes.addAll(newRoutes);
+    notifyListeners();
+  }
+
 }

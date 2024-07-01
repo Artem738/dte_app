@@ -22,6 +22,7 @@ class DynamicPage extends StatelessWidget {
             Text('This is the "${routeModel.pageName}" page'),
             Text('Path: "${routeModel.path}"'),
             Text('Page Path Name: "${routeModel.pagePathName}"'),
+            Text('pageType: "${routeModel.pageType}"'),
           ],
         ),
       ),

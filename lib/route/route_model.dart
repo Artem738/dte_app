@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+
 class RouteModel {
   final String path;
   final String pageName;
   final String pageType;
   final String pagePathName;
   final List<RouteModel>? subRoutes;
+  final Widget Function(BuildContext, RouteSettings)? builder;
 
   RouteModel({
     required this.path,
@@ -11,6 +14,7 @@ class RouteModel {
     required this.pageType,
     required this.pagePathName,
     this.subRoutes,
+    this.builder,
   });
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,7 @@ class RouteModel {
           .map((i) => RouteModel.fromJson(i))
           .toList()
           : null,
+      builder: null, // builder не из JSON, добавляется позже
     );
   }
 }
