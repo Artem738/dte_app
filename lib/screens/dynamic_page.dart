@@ -11,14 +11,14 @@ class DynamicPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final contentProvider = Provider.of<ContentProvider>(context);
+    final contentProvider = context.read<ContentProvider>();
     final contentModel = contentProvider.content[routeModel.pagePathName];
 
     // Убедимся, что contentModel не null, и назначим его содержимое переменной content
     final content = contentModel?.content['content'] ?? {};
 
     // Отладочный вывод
-    print('Content Model for ${routeModel.pagePathName}: ${content.toString()}');
+    //print('Content Model for ${routeModel.pagePathName}: ${content.toString()}');
 
     return Scaffold(
       appBar: AppBar(

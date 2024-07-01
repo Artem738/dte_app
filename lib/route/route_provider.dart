@@ -70,10 +70,12 @@ class RouteProvider with ChangeNotifier {
         'path': route.path,
         'pageType': route.pageType,
         'pageName': route.pageName,
+        'pagePathName': route.pagePathName,
         'subRoutes': route.subRoutes?.map((subRoute) {
           return {
             'path': '${route.path}/${subRoute.path}',
             'pageType': route.pageType,
+            'pagePathName': route.pagePathName,
             'pageName': subRoute.pageName,
           };
         }).toList()
