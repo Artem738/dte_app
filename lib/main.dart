@@ -1,3 +1,5 @@
+import 'package:dte_app/content/content_model.dart';
+import 'package:dte_app/content/content_provider.dart';
 import 'package:dte_app/env_config.dart';
 import 'package:dte_app/my_app.dart';
 import 'package:dte_app/route/route_model.dart';
@@ -13,8 +15,15 @@ void main() async {
   runApp(const LoadingApp());
 
   try {
-    List<RouteModel> routes = await RouteProvider.fetchRoutData();
     final routeProvider = RouteProvider();
+    final contentProvider = ContentProvider();
+    List<RouteModel> routes = await RouteProvider.fetchRoutData();
+    Map<String, ContentModel> content = await ContentProvider.fetchContentData('ru');
+
+    contentProvider.setContent(content); // Устанавливаем контент в провайдер
+
+    // Отладочный вывод
+    print(contentProvider.content.toString());
 
     routeProvider.setRoutes(routes);
     routeProvider.addIndependentRoutes([
@@ -37,6 +46,7 @@ void main() async {
     runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => routeProvider),
+        ChangeNotifierProvider(create: (_) => contentProvider),
       ],
       child: MyApp(routes: routes), // Передаем routes в MyApp
     ));
@@ -44,6 +54,8 @@ void main() async {
     runApp(ErrorApp(errorMessage: 'Ошибка загрузки данных. Пожалуйста, попробуйте снова.'));
   }
 }
+
+
 
 class SettingsScreen extends StatelessWidget {
   @override
