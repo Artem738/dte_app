@@ -2,7 +2,6 @@ import 'package:dte_app/route/route_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key}) : super(key: key);
 
@@ -31,7 +30,13 @@ class DrawerMenu extends StatelessWidget {
             final subRoutes = item['subRoutes'] ?? [];
             if (subRoutes.isNotEmpty) {
               return ExpansionTile(
-                title: Text(item['pageName'] ?? 'No Name'),
+                title: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, item['path']);
+                  },
+                  child: Text(item['pageName'] ?? 'No Name'),
+                ),
                 children: subRoutes.map<Widget>((subItem) {
                   return Container(
                     padding: const EdgeInsetsDirectional.only(start: 10),
