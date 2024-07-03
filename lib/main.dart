@@ -23,8 +23,8 @@ void main() async {
     final templateProvider = TemplateProvider();
 
     // Загружаем данные
-    List<RouteModel> routes = await RouteProvider.fetchRoutData();
-    Map<String, ContentModel> content = await ContentProvider.fetchContentData('ru');
+    List<RouteModel> routes = await RouteProvider.fetchRoutData('uk');
+    Map<String, ContentModel> content = await ContentProvider.fetchContentData('uk');
     Map<String, List<TemplateModel>> templates = await TemplateProvider.fetchTemplateData();
 
     // Устанавливаем данные в провайдеры

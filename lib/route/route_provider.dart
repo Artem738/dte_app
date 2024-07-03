@@ -12,8 +12,8 @@ class RouteProvider with ChangeNotifier {
   List<RouteModel> get routes => _routes;
 
 
-  static Future<List<RouteModel>>  fetchRoutData() async {
-    String url = '${EnvConfig.mainApiUrl}api/menu/en';
+  static Future<List<RouteModel>>  fetchRoutData(String lang) async {
+    String url = '${EnvConfig.mainApiUrl}api/menu/$lang';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

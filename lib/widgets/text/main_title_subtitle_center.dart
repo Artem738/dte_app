@@ -1,42 +1,36 @@
+// main_title_subtitle_center.dart
 import 'package:flutter/material.dart';
 
 class MainTitleSubtitleCenter extends StatelessWidget {
-  final String title;
-  final String subtitle;
+  final Map<String, dynamic> data;
 
-  const MainTitleSubtitleCenter({
-    Key? key,
-    required this.title,
-    required this.subtitle,
-  }) : super(key: key);
+  MainTitleSubtitleCenter({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: Column(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 18,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+    //print(data);
+    //print(content['content']['title'].toString());
+
+    final title = data['title'] ?? '';
+    final subtitle = data['subtitle'] ?? '';
+
+    return Column(
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
         ),
-      ),
+        SizedBox(height: 10),
+        Text(
+          subtitle,
+          style: TextStyle(fontSize: 17),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
-

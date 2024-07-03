@@ -1,10 +1,11 @@
+import 'package:dte_app/templates/template_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:dte_app/content/content_provider.dart';
 import 'package:dte_app/route/route_model.dart';
 import 'package:dte_app/screens/draver_menu.dart';
-import 'package:dte_app/templates/template_model.dart';
 import 'package:dte_app/templates/template_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'widget_factory.dart';
 
 class DynamicPage extends StatelessWidget {
   final RouteModel routeModel;
@@ -16,35 +17,32 @@ class DynamicPage extends StatelessWidget {
     final contentProvider = context.read<ContentProvider>();
     final templateProvider = context.read<TemplateProvider>();
 
-    final contentModel = contentProvider.content[routeModel.pagePathName];
-    final content = contentModel?.content['content'] ?? {};
-
+    final content = contentProvider.content[routeModel.pagePathName]?.content['content'] ?? {};
     final List<TemplateModel>? templates = templateProvider.templates[routeModel.pagePathName];
 
     return Scaffold(
       appBar: AppBar(
+        leading: (routeModel.pageType == "page")
+            ? IconButton(
+          icon: const Icon(Icons.home),
+          onPressed: () {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+        )
+            : null,
         title: Text(routeModel.pageName),
       ),
-      drawer: DrawerMenu(),
+      endDrawer: DrawerMenu(),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Text('This is the "${routeModel.pageName}" page'),
-              // Text('Path: "${routeModel.path}"'),
-              // Text('Page Path Name: "${routeModel.pagePathName}"'),
-              // Text('Page Type: "${routeModel.pageType}"'),
-              //...content.entries.map((entry) => Text('${entry.key}: ${entry.value}')).toList(),
-              ...?templates?.map((template) {
-                return Column(
-                  children: [
-                    Text('Component Name: ${template.componentName}'),
-                    Text('Component Data: ${template.componentData.toString()}'),
-                  ],
-                );
-              }).toList(),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: templates?.map((template) {
+                return createWidget(template.componentName, template.componentData, content) ?? SizedBox.shrink();
+              }).toList() ?? [],
+            ),
           ),
         ),
       ),
